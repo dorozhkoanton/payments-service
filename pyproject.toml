@@ -1,0 +1,50 @@
+[project]
+name = "payments-service"
+version = "0.1.0"
+description = "Асинхронный сервис процессинга платежей"
+requires-python = ">=3.14"
+dependencies = [
+    "alembic>=1.19",
+    "asyncpg>=0.31",
+    "fastapi>=0.142.2",
+    "faststream[cli,rabbit]>=0.7.7,<0.8",
+    "httpx>=0.28.1,<1",
+    "pydantic>=2.13,<3",
+    "pydantic-settings>=2.14.2",
+    "sqlalchemy[asyncio]>=2.0.54,<2.1",
+    "structlog>=26.1",
+    "uvicorn[standard]>=0.54",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=2.4.0",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "respx>=0.23.1",
+    "ruff>=0.16.10",
+    "testcontainers[postgres,rabbitmq]>=4.15.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "ASYNC", "S", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S311"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+plugins = ["pydantic.mypy"]
+files = ["app"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+pythonpath = ["."]
+testpaths = ["tests"]
+filterwarnings = ["ignore:The @wait_container_is_ready decorator is deprecated:DeprecationWarning"]
